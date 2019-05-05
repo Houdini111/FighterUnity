@@ -79,17 +79,17 @@ public class Controller : MonoBehaviour
     public Map lookL;
 
     public Map moveMod;
-    public Map lookMod;
-
-    public Map defendU;
-    public Map defendR;
-    public Map defendD;
-    public Map defendL;
+    public Map attackMod;
 
     public Map attackU;
     public Map attackR;
     public Map attackD;
     public Map attackL;
+
+    public Map defendU;
+    public Map defendR;
+    public Map defendD;
+    public Map defendL;
 
     void setAllFalse()
     {
@@ -122,7 +122,7 @@ public class Controller : MonoBehaviour
 	    lookL = new Map();
 
 	    moveMod = new Map();
-	    lookMod = new Map();
+	    attackMod = new Map();
 
 	    defendU = new Map();
 	    defendR = new Map();
@@ -146,17 +146,17 @@ public class Controller : MonoBehaviour
 	    inputMaps.Add(lookL);
 
 	    inputMaps.Add(moveMod);
-	    inputMaps.Add(lookMod);
+	    inputMaps.Add(attackMod);
 
-	    inputMaps.Add(defendU);
+        inputMaps.Add(attackU);
+        inputMaps.Add(attackR);
+        inputMaps.Add(attackD);
+        inputMaps.Add(attackL);
+
+        inputMaps.Add(defendU);
 	    inputMaps.Add(defendR);
 	    inputMaps.Add(defendD);
 	    inputMaps.Add(defendL);
-
-	    inputMaps.Add(attackU);
-	    inputMaps.Add(attackR);
-	    inputMaps.Add(attackD);
-	    inputMaps.Add(attackL);
 
 	    setAllFalse();
 	}
@@ -167,8 +167,8 @@ public class Controller : MonoBehaviour
         if(Input.GetAxisRaw("moveModifier") > 0) { moveMod.press(); }
         else { moveMod.release(); }
 
-	    if (Input.GetAxisRaw("lookModifier") > 0) { lookMod.press(); }
-	    else { lookMod.release(); }
+	    if (Input.GetAxisRaw("attackModifier") > 0) { attackMod.press(); }
+	    else { attackMod.release(); }
 
         if (moveMod.hold)
         {
@@ -179,42 +179,42 @@ public class Controller : MonoBehaviour
 
 	        if (Input.GetAxisRaw("moveVertically") > 0)
 	        {
-                defendU.press();
-                defendD.release();
+                lookU.press();
+                lookD.release();
 	        }
             else if (Input.GetAxisRaw("moveVertically") < 0)
 	        {
-	            defendU.release();
-	            defendD.press();
+	            lookU.release();
+	            lookD.press();
 	        }
             else
             {
-                defendU.release();
-                defendD.release();
+                lookU.release();
+                lookD.release();
             }
 
 	        if (Input.GetAxisRaw("moveHorizontally") > 0)
 	        {
-	            defendR.press();
-	            defendL.release();
+	            lookR.press();
+	            lookL.release();
 	        }
 	        else if (Input.GetAxisRaw("moveHorizontally") < 0)
 	        {
-	            defendR.release();
-	            defendL.press();
+	            lookR.release();
+	            lookL.press();
 	        }
 	        else
 	        {
-	            defendR.release();
-	            defendL.release();
+	            lookR.release();
+	            lookL.release();
 	        }
         }
 	    else
         {
-            defendU.release();
-            defendR.release();
-	        defendD.release();
-	        defendL.release();
+            lookU.release();
+            lookR.release();
+	        lookD.release();
+	        lookL.release();
 
 	        if (Input.GetAxisRaw("moveVertically") > 0)
 	        {
@@ -250,83 +250,83 @@ public class Controller : MonoBehaviour
         }
 
 
-	    if (lookMod.hold)
+	    if (attackMod.hold)
 	    {
-	        lookU.release();
-	        lookR.release();
-	        lookD.release();
-	        lookL.release();
+            attackU.release();
+            attackR.release();
+            attackD.release();
+            attackL.release();
 
-	        if (Input.GetAxisRaw("lookVertically") > 0)
-	        {
-	            attackU.press();
-	            attackD.release();
-	        }
-	        else if (Input.GetAxisRaw("lookVertically") < 0)
-	        {
-	            attackU.release();
-	            attackD.press();
-	        }
-	        else
-	        {
-	            attackU.release();
-	            attackD.release();
-	        }
+            if (Input.GetAxisRaw("attackVertically") > 0)
+            {
+                defendU.press();
+                defendD.release();
+            }
+            else if (Input.GetAxisRaw("attackVertically") < 0)
+            {
+                defendU.release();
+                defendD.press();
+            }
+            else
+            {
+                defendU.release();
+                defendD.release();
+            }
 
-	        if (Input.GetAxisRaw("lookHorizontally") > 0)
-	        {
-	            attackR.press();
-	            attackL.release();
-	        }
-	        else if (Input.GetAxisRaw("lookHorizontally") < 0)
-	        {
-	            attackR.release();
-                attackL.press();
-	        }
-	        else
-	        {
-	            attackR.release();
-	            attackL.release();
-	        }
-	    }
+            if (Input.GetAxisRaw("attackHorizontally") > 0)
+            {
+                defendR.press();
+                defendL.release();
+            }
+            else if (Input.GetAxisRaw("attackHorizontally") < 0)
+            {
+                defendR.release();
+                defendL.press();
+            }
+            else
+            {
+                defendR.release();
+                defendL.release();
+            }
+        }
 	    else
 	    {
-	        attackU.release();
-	        attackR.release();
-	        attackD.release();
-	        attackL.release();
+            defendU.release();
+            defendR.release();
+            defendD.release();
+            defendL.release();
+            
+            if (Input.GetAxisRaw("attackVertically") > 0)
+            {
+                attackU.press();
+                attackD.release();
+            }
+            else if (Input.GetAxisRaw("attackVertically") < 0)
+            {
+                attackU.release();
+                attackD.press();
+            }
+            else
+            {
+                attackU.release();
+                attackD.release();
+            }
 
-	        if (Input.GetAxisRaw("lookVertically") > 0)
-	        {
-	            lookU.press();
-	            lookD.release();
-	        }
-	        else if (Input.GetAxisRaw("lookVertically") < 0)
-	        {
-	            lookU.release();
-	            lookD.press();
-	        }
-	        else
-	        {
-	            lookU.release();
-	            lookD.release();
-	        }
-
-	        if (Input.GetAxisRaw("lookHorizontally") > 0)
-	        {
-	            lookR.press();
-	            lookL.release();
-	        }
-	        else if (Input.GetAxisRaw("lookHorizontally") < 0)
-	        {
-	            lookR.release();
-	            lookL.press();
-	        }
-	        else
-	        {
-	            lookR.release();
-	            lookL.release();
-	        }
-	    }
+            if (Input.GetAxisRaw("attackHorizontally") > 0)
+            {
+                attackR.press();
+                attackL.release();
+            }
+            else if (Input.GetAxisRaw("attackHorizontally") < 0)
+            {
+                attackR.release();
+                attackL.press();
+            }
+            else
+            {
+                attackR.release();
+                attackL.release();
+            }
+        }
     }
 }

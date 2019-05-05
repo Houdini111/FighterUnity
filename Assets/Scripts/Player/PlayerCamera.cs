@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCamera : MonoBehaviour {
     
     public Player player;
-    public float cameraHeight = 20.0f;
+    public float cameraHeight = 10.0f;
     public float MAX_SPEED;
 
 	// Use this for initialization
@@ -26,6 +26,6 @@ public class PlayerCamera : MonoBehaviour {
         else if (pos1.x < pos2.x) { xDir = -1; }
         float x = Mathf.Min(Mathf.Abs(pos1.x - pos2.x)/2, MAX_SPEED * Time.deltaTime);
         float y = Mathf.Min(Mathf.Abs(pos1.y - pos2.y)/2, MAX_SPEED * Time.deltaTime);
-        transform.position = new Vector3(pos2.x + x*xDir, pos2.y + y*yDir, pos2.z);
+        transform.position = new Vector3(pos2.x + x*xDir, pos2.y + y*yDir, -cameraHeight);
 	}
 }
