@@ -1,0 +1,21 @@
+{"Classification": "Normal",
+"Children": {
+"Up":{"Classification": "Normal",
+"Children": {
+}}
+,
+"Right":{"Classification": "Inter",
+"Children": {
+"Up":{"Classification": "Final",
+"Children": {
+}}
+}}
+,
+"Down":{"Classification": "Normal",
+"Children": {
+}}
+,
+"Left":{"Classification": "Final",
+"Children": {
+}}
+}}

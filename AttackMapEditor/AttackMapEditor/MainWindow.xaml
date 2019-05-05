@@ -1,0 +1,180 @@
+﻿<Window x:Class="AttackMapEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AttackMapEditor"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="768" Width="1280">
+    <Grid>
+        <GroupBox x:Name="PropertiesGroupBox" Header="Properties" HorizontalAlignment="Left" Height="717" Margin="10,10,0,0" VerticalAlignment="Top" Width="275">
+            <Grid x:Name="PropertiesGrid" HorizontalAlignment="Left" Height="707" Margin="0,0,-2,-12" VerticalAlignment="Top" Width="265">
+                <Label Content="Classification" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top"/>
+                <ComboBox Name="ClassificationBox" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="245" SelectionChanged="ClassificationBoxChanged"/>
+            </Grid>
+        </GroupBox>
+        <TreeView x:Name="NodeTreeView" HorizontalAlignment="Left" Height="717" Margin="987,10,0,0" VerticalAlignment="Top" Width="275"/>
+
+        <Canvas Name="CenterButton" HorizontalAlignment="Left" Height="140" Margin="586,275,0,0" VerticalAlignment="Top" Width="140">
+
+            <Rectangle Name="CenterSelect" Stroke="Blue"
+                       StrokeThickness="2"
+                       Width="140" Height="140">
+                <Rectangle.Fill>
+                    <SolidColorBrush>
+                        <SolidColorBrush.Color>
+                            <Color A="255" R="225" G="225" B="255"/>
+                        </SolidColorBrush.Color>
+                    </SolidColorBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Name="CenterSquare" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+            <Rectangle Name="CenterDiamond"  Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100" Canvas.Left="-20" Canvas.Top="-20">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+
+            <Ellipse Name="CenterCircle" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+        </Canvas>
+
+        <Canvas Name="TopButton" HorizontalAlignment="Left" Height="140" Margin="586,134,0,0" VerticalAlignment="Top" Width="140">
+
+            <Rectangle Name="TopSelect" Stroke="Blue"
+                       StrokeThickness="2"
+                       Width="140" Height="140">
+                <Rectangle.Fill>
+                    <SolidColorBrush>
+                        <SolidColorBrush.Color>
+                            <Color A="255" R="225" G="225" B="255"/>
+                        </SolidColorBrush.Color>
+                    </SolidColorBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Name="TopSquare" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+            <Rectangle Name="TopDiamond" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100" Canvas.Left="-20" Canvas.Top="-20">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+
+            <Ellipse Name="TopCircle" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+        </Canvas>
+
+        <Canvas Name="RightButton" HorizontalAlignment="Left" Height="140" Margin="727,275,0,0" VerticalAlignment="Top" Width="140">
+
+            <Rectangle Name="RightSelect" Stroke="Blue"
+                       StrokeThickness="2"
+                       Width="140" Height="140">
+                <Rectangle.Fill>
+                    <SolidColorBrush>
+                        <SolidColorBrush.Color>
+                            <Color A="255" R="225" G="225" B="255"/>
+                        </SolidColorBrush.Color>
+                    </SolidColorBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Name="RightSquare" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+            <Rectangle Name="RightDiamond" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100" Canvas.Left="-20" Canvas.Top="-20">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+
+            <Ellipse Name="RightCircle" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+        </Canvas>
+
+        <Canvas Name="BottomButton" HorizontalAlignment="Left" Height="140" Margin="586,416,0,0" VerticalAlignment="Top" Width="140">
+
+            <Rectangle Name="BottomSelect" Stroke="Blue"
+                       StrokeThickness="2"
+                       Width="140" Height="140">
+                <Rectangle.Fill>
+                    <SolidColorBrush>
+                        <SolidColorBrush.Color>
+                            <Color A="255" R="225" G="225" B="255"/>
+                        </SolidColorBrush.Color>
+                    </SolidColorBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Name="BottomSquare" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+            <Rectangle Name="BottomDiamond" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100" Canvas.Left="-20" Canvas.Top="-20">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+
+            <Ellipse Name="BottomCircle" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+        </Canvas>
+
+        <Canvas Name="LeftButton" HorizontalAlignment="Left" Height="140" Margin="445,275,0,0" VerticalAlignment="Top" Width="140">
+
+            <Rectangle Name="LeftSelect" Stroke="Blue"
+                       StrokeThickness="2"
+                       Width="140" Height="140">
+                <Rectangle.Fill>
+                    <SolidColorBrush>
+                        <SolidColorBrush.Color>
+                            <Color A="255" R="225" G="225" B="255"/>
+                        </SolidColorBrush.Color>
+                    </SolidColorBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Name="LeftSquare" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+            <Rectangle Name="LeftDiamond" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100" Canvas.Left="-20" Canvas.Top="-20">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+
+            <Ellipse Name="LeftCircle" Stroke="Black" Margin="20,20,0,0"
+                StrokeThickness="2" Fill="LightGray"
+                Width="100" Height="100"/>
+
+        </Canvas>
+        <Button Name="UpButton" HorizontalAlignment="Left" Margin="494,182,0,0" VerticalAlignment="Top" Width="44" FontFamily="Marlett" FontSize="40" Content="5"/>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="900,687,0,0" VerticalAlignment="Top" Width="75" Height="40" Click="Save"/>
+
+    </Grid>
+</Window>
