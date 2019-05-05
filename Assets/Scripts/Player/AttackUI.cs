@@ -52,17 +52,6 @@ public class AttackUI : MonoBehaviour {
                 transitionQueue.Add(new AttackModeChange(bottom, AttackModeChange.Type.ToAttack));
                 transitionQueue.Add(new AttackModeChange(left, AttackModeChange.Type.ToAttack));
                 transitionQueue.Add(new AttackModeChange(middle, AttackModeChange.Type.ToAttack));
-                //top.transitionPositionScale = 1f;
-                //right.transitionPositionScale = 1f;
-                //bottom.transitionPositionScale = 1f;
-                //left.transitionPositionScale = 1f;
-                //middle.transitionPositionScale = 1f;
-
-                //top.activeScaleFactor = 1f;
-                //right.activeScaleFactor = 1f;
-                //bottom.activeScaleFactor = 1f;
-                //left.activeScaleFactor = 1f;
-                //middle.activeScaleFactor = 1f;
             }
             else
             {
@@ -71,17 +60,6 @@ public class AttackUI : MonoBehaviour {
                 transitionQueue.Add(new AttackModeChange(bottom, AttackModeChange.Type.FromAttack));
                 transitionQueue.Add(new AttackModeChange(left, AttackModeChange.Type.FromAttack));
                 transitionQueue.Add(new AttackModeChange(middle, AttackModeChange.Type.FromAttack));
-                //top.transitionPositionScale = inactiveScaleFactor;
-                //right.transitionPositionScale = inactiveScaleFactor;
-                //bottom.transitionPositionScale = inactiveScaleFactor;
-                //left.transitionPositionScale = inactiveScaleFactor;
-                //middle.transitionPositionScale = inactiveScaleFactor;
-
-                //top.activeScaleFactor = inactiveScaleFactor;
-                //right.activeScaleFactor = inactiveScaleFactor;
-                //bottom.activeScaleFactor = inactiveScaleFactor;
-                //left.activeScaleFactor = inactiveScaleFactor;
-                //middle.activeScaleFactor = inactiveScaleFactor;
             }
         }
     }
@@ -115,8 +93,7 @@ public class AttackUI : MonoBehaviour {
             this.type = type;
         }
     }
-
-
+    
     class Change
     {
         public Vector2 startPos;
@@ -125,7 +102,7 @@ public class AttackUI : MonoBehaviour {
         public float timeLeft;
         public UIMaster shape;
         public ChangeMode mode;
-        public char? direction;
+        public Direction? direction;
         public Change next;
         public Color? color;
         public Shape? form;
@@ -259,25 +236,25 @@ public class AttackUI : MonoBehaviour {
                 {
                     if (change.direction == null)
                     {
-                        if (change.shape == top) { change.direction = 'U'; }
-                        else if (change.shape == right) { change.direction = 'R'; }
-                        else if (change.shape == bottom) { change.direction = 'B'; }
-                        else if (change.shape == left) { change.direction = 'L'; }
+                        if (change.shape == top) { change.direction = Direction.Up; }
+                        else if (change.shape == right) { change.direction = Direction.Right; }
+                        else if (change.shape == bottom) { change.direction = Direction.Down; }
+                        else if (change.shape == left) { change.direction = Direction.Left; }
                     }
                     float percent = change.timeLeft / change.totalTime;
                     percent -= 1;
                     switch (change.direction)
                     {
-                        case 'U':
+                        case Direction.Up:
                             change.shape.animationCenter = new Vector2(change.shape.animationCenter.x, change.shape.startPos.y * percent);
                             break;
-                        case 'R':
+                        case Direction.Right:
                             change.shape.animationCenter = new Vector2(change.shape.startPos.x * percent, change.shape.animationCenter.y);
                             break;
-                        case 'B':
+                        case Direction.Down:
                             change.shape.animationCenter = new Vector2(change.shape.animationCenter.x, change.shape.startPos.y * percent);
                             break;
-                        case 'L':
+                        case Direction.Left:
                             change.shape.animationCenter = new Vector2(change.shape.startPos.x * percent, change.shape.animationCenter.y);
                             break;
                     }
@@ -286,25 +263,25 @@ public class AttackUI : MonoBehaviour {
                 {
                     if (change.direction == null)
                     {
-                        if (change.shape == top) { change.direction = 'U'; }
-                        else if (change.shape == right) { change.direction = 'R'; }
-                        else if (change.shape == bottom) { change.direction = 'B'; }
-                        else if (change.shape == left) { change.direction = 'L'; }
+                        if (change.shape == top) { change.direction = Direction.Up; }
+                        else if (change.shape == right) { change.direction = Direction.Right; }
+                        else if (change.shape == bottom) { change.direction = Direction.Down; }
+                        else if (change.shape == left) { change.direction = Direction.Left; }
                     }
                     float percent = 1 - (change.timeLeft / change.totalTime);
                     percent -= 1;
                     switch (change.direction)
                     {
-                        case 'U':
+                        case Direction.Up:
                             change.shape.animationCenter = new Vector2(change.shape.animationCenter.x, change.shape.startPos.y * percent);
                             break;
-                        case 'R':
+                        case Direction.Right:
                             change.shape.animationCenter = new Vector2(change.shape.startPos.x * percent, change.shape.animationCenter.y);
                             break;
-                        case 'B':
+                        case Direction.Down:
                             change.shape.animationCenter = new Vector2(change.shape.animationCenter.x, change.shape.startPos.y * percent);
                             break;
-                        case 'L':
+                        case Direction.Left:
                             change.shape.animationCenter = new Vector2(change.shape.startPos.x * percent, change.shape.animationCenter.y);
                             break;
                     }
@@ -387,12 +364,10 @@ public class AttackUI : MonoBehaviour {
     }
 
     #region Shrink Shape
-    private void shrinkShape(char code, float msTime)
+    private void shrinkShape(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.Shrink));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Shrink));
     }
 
     private void shrinkShape(UIMaster shape, float msTime)
@@ -402,12 +377,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.Shrink));
     }
 
-    private Change getShrinkShapeChange(char code, float msTime)
+    private Change getShrinkShapeChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.Shrink);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Shrink);
     }
 
     private Change getShrinkShapeChange(UIMaster shape, float msTime)
@@ -419,12 +392,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Grow Shape
-    private void growShape(char code, float msTime)
+    private void growShape(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.Grow));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Grow));
     }
 
     private void growShape(UIMaster shape, float msTime)
@@ -434,12 +405,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.Grow));
     }
 
-    private Change getGrowShapeChange(char code, float msTime)
+    private Change getGrowShapeChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.Grow);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Grow);
     }
 
     private Change getGrowShapeChange(UIMaster shape, float msTime)
@@ -451,12 +420,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Move Shape To Center
-    private void moveShapeToCenter(char code, float msTime)
+    private void moveShapeToCenter(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.MoveToCenter));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.MoveToCenter));
     }
 
     private void moveShapeToCenter(UIMaster shape, float msTime)
@@ -466,12 +433,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.MoveToCenter));
     }
 
-    private Change getMoveShapeToCenterChange(char code, float msTime)
+    private Change getMoveShapeToCenterChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.MoveToCenter);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.MoveToCenter);
     }
 
     private Change getMoveShapeToCenterChange(UIMaster shape, float msTime)
@@ -483,12 +448,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Move Shape To Original Position
-    private void moveShapeToOriginalPosition(char code, float msTime)
+    private void moveShapeToOriginalPosition(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.MoveToOriginalPosition));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.MoveToOriginalPosition));
     }
 
     private void moveShapeToOriginalPosition(UIMaster shape, float msTime)
@@ -498,12 +461,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.MoveToOriginalPosition));
     }
 
-    private Change getMoveShapeToOriginalPositionChange(char code, float msTime)
+    private Change getMoveShapeToOriginalPositionChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.MoveToOriginalPosition);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.MoveToOriginalPosition);
     }
 
     private Change getMoveShapeToOriginalPositionChange(UIMaster shape, float msTime)
@@ -515,12 +476,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Hide Shape
-    private void hideShape(char code, float msTime)
+    private void hideShape(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.Hide));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Hide));
     }
 
     private void hideShape(UIMaster shape, float msTime)
@@ -530,12 +489,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.Hide));
     }
 
-    private Change getHideShapeChange(char code, float msTime)
+    private Change getHideShapeChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.Hide);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Hide);
     }
 
     private Change getHideShapeChange(UIMaster shape, float msTime)
@@ -547,12 +504,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Show Shape
-    private void showShape(char code, float msTime)
+    private void showShape(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (msTime < 0) { return; }
-        changeQueue.Add(new Change(getShape(code), msTime, Change.ChangeMode.Show));
+        changeQueue.Add(new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Show));
     }
 
     private void showShape(UIMaster shape, float msTime)
@@ -562,12 +517,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(new Change(shape, msTime, Change.ChangeMode.Show));
     }
 
-    private Change getShowShapeChange(char code, float msTime)
+    private Change getShowShapeChange(Direction dir, float msTime)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (msTime < 0) { return null; }
-        return new Change(getShape(code), msTime, Change.ChangeMode.Show);
+        return new Change(getMasterFromDir(dir), msTime, Change.ChangeMode.Show);
     }
 
     private Change getShowShapeChange(UIMaster shape, float msTime)
@@ -579,12 +532,10 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Set Shape Color
-    private void setShapeColor(char code, Color color)
+    private void setShapeColor(Direction dir, Color color)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
         if (color == null) { return; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Color);
+        Change c = new Change(getMasterFromDir(dir), 0, Change.ChangeMode.Color);
         c.color = color;
         changeQueue.Add(c);
     }
@@ -598,12 +549,10 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(c);
     }
 
-    private Change getSetShapeColorChange (char code,  Color color)
+    private Change getSetShapeColorChange(Direction dir,  Color color)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
         if (color == null) { return null; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Color);
+        Change c = new Change(getMasterFromDir(dir), 0, Change.ChangeMode.Color);
         c.color = color;
         return c;
     }
@@ -619,49 +568,9 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Set Shape Shape
-    private void setShapeShape(char code, char shapeCode)
+    private void setShapeShape(Direction dir, Shape newShape)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
-        if (shapeCode == '\0') { return; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Shape);
-        c.form = getShapeFromCode(shapeCode);
-        changeQueue.Add(c);
-    }
-
-    private void setShapeShape(UIMaster shape, char shapeCode)
-    {
-        if (shape == null) { return; }
-        if (shapeCode == '\0') { return; }
-        Change c = new Change(shape, 0, Change.ChangeMode.Shape);
-        c.form = getShapeFromCode(shapeCode);
-        changeQueue.Add(c);
-    }
-
-    private Change getSetShapeShapeChange(char code, char shapeCode)
-    {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
-        if (shapeCode == '\0') { return null; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Shape);
-        c.form = getShapeFromCode(shapeCode);
-        return c;
-    }
-
-    private Change getSetShapeShapeChange(UIMaster shape, char shapeCode)
-    {
-        if (shape == null) { return null; }
-        if (shapeCode == '\0') { return null; }
-        Change c = new Change(shape, 0, Change.ChangeMode.Shape);
-        c.form = getShapeFromCode(shapeCode);
-        return c;
-    }
-
-    private void setShapeShape(char code, Shape newShape)
-    {
-        code = unifyCode(code);
-        if (code == '\0') { return; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Shape);
+        Change c = new Change(getMasterFromDir(dir), 0, Change.ChangeMode.Shape);
         c.form = newShape;
         changeQueue.Add(c);
     }
@@ -674,11 +583,9 @@ public class AttackUI : MonoBehaviour {
         changeQueue.Add(c);
     }
 
-    private Change getSetShapeShapeChange(char code, Shape newShape)
+    private Change getSetShapeShapeChange(Direction dir, Shape newShape)
     {
-        code = unifyCode(code);
-        if (code == '\0') { return null; }
-        Change c = new Change(getShape(code), 0, Change.ChangeMode.Shape);
+        Change c = new Change(getMasterFromDir(dir), 0, Change.ChangeMode.Shape);
         c.form = newShape;
         return c;
     }
@@ -707,19 +614,18 @@ public class AttackUI : MonoBehaviour {
     #endregion
 
     #region Select Circle
-    public void selectCircle(char code, float time, Dictionary<char, Color> nextOptions, Dictionary<char, char> shapes, int depth)
+    public void selectCircle(Direction dir, float time, Dictionary<Direction, Color> nextOptions, Dictionary<Direction, Shape> shapes, int depth)
     {
-        if(code == '\0') { return; }
         if(time < 0) { return; }
         List<Change> changes = new List<Change>();
-        UIMaster selected = getShape(code);
+        UIMaster selected = getMasterFromDir(dir);
         if (top != selected)
         {
             Change temp = getShrinkShapeChange(top, time / 2);
-            if (nextOptions.ContainsKey('U'))
+            if (nextOptions.ContainsKey(Direction.Up))
             {
-                temp.next = getSetShapeColorChange(top, nextOptions['U']);
-                temp.next.next = getSetShapeShapeChange(top, shapes['U']);
+                temp.next = getSetShapeColorChange(top, nextOptions[Direction.Up]);
+                temp.next.next = getSetShapeShapeChange(top, shapes[Direction.Up]);
                 temp.next.next.next = getShowShapeChange(top, 0);
                 temp.next.next.next.next = getGrowShapeChange(top, time / 2);
             }
@@ -729,10 +635,10 @@ public class AttackUI : MonoBehaviour {
         if (right != selected)
         {
             Change temp = getShrinkShapeChange(right, time / 2);
-            if (nextOptions.ContainsKey('R'))
+            if (nextOptions.ContainsKey(Direction.Right))
             {
-                temp.next = getSetShapeColorChange(right, nextOptions['R']);
-                temp.next.next = getSetShapeShapeChange(top, shapes['R']);
+                temp.next = getSetShapeColorChange(right, nextOptions[Direction.Right]);
+                temp.next.next = getSetShapeShapeChange(top, shapes[Direction.Right]);
                 temp.next.next.next = getShowShapeChange(right, 0);
                 temp.next.next.next.next = getGrowShapeChange(right, time / 2);
             }
@@ -742,10 +648,10 @@ public class AttackUI : MonoBehaviour {
         if (bottom != selected)
         {
             Change temp = getShrinkShapeChange(bottom, time / 2);
-            if (nextOptions.ContainsKey('D'))
+            if (nextOptions.ContainsKey(Direction.Down))
             {
-                temp.next = getSetShapeColorChange(bottom, nextOptions['D']);
-                temp.next.next = getSetShapeShapeChange(top, shapes['D']);
+                temp.next = getSetShapeColorChange(bottom, nextOptions[Direction.Down]);
+                temp.next.next = getSetShapeShapeChange(top, shapes[Direction.Down]);
                 temp.next.next.next = getShowShapeChange(bottom, 0);
                 temp.next.next.next.next = getGrowShapeChange(bottom, time / 2);
             }
@@ -755,10 +661,10 @@ public class AttackUI : MonoBehaviour {
         if (left != selected)
         {
             Change temp = getShrinkShapeChange(left, time / 2);
-            if (nextOptions.ContainsKey('L'))
+            if (nextOptions.ContainsKey(Direction.Left))
             {
-                temp.next = getSetShapeColorChange(left, nextOptions['L']);
-                temp.next.next = getSetShapeShapeChange(top, shapes['L']);
+                temp.next = getSetShapeColorChange(left, nextOptions[Direction.Left]);
+                temp.next.next = getSetShapeShapeChange(top, shapes[Direction.Left]);
                 temp.next.next.next = getShowShapeChange(left, 0);
                 temp.next.next.next.next = getGrowShapeChange(left, time / 2);
             }
@@ -769,8 +675,8 @@ public class AttackUI : MonoBehaviour {
         selectedChange.next = getMoveShapeToOriginalPositionChange(selected, 0);
         if(nextOptions.ContainsKey(getDirection(selected)))
         {
-            selectedChange.next.next = getSetShapeColorChange(selected, nextOptions[code]);
-            selectedChange.next.next.next = getSetShapeShapeChange(selected, shapes[code]);
+            selectedChange.next.next = getSetShapeColorChange(selected, nextOptions[dir]);
+            selectedChange.next.next.next = getSetShapeShapeChange(selected, shapes[dir]);
             selectedChange.next.next.next.next = getShowShapeChange(selected, 0);
             selectedChange.next.next.next.next.next = getGrowShapeChange(selected, time / 2);
         }
@@ -805,22 +711,22 @@ public class AttackUI : MonoBehaviour {
     }
     #endregion
 
-    private UIMaster getShape(char code)
+    private UIMaster getShape(Direction code)
     {
         UIMaster ret = null;
 
         switch(code)
         {
-            case 'U':
+            case Direction.Up:
                 ret = top;
                 break;
-            case 'R':
+            case Direction.Right:
                 ret = right;
                 break;
-            case 'D':
+            case Direction.Down:
                 ret = bottom;
                 break;
-            case 'L':
+            case Direction.Left:
                 ret = left;
                 break;
         }
@@ -828,45 +734,22 @@ public class AttackUI : MonoBehaviour {
         return ret;
     }
 
-    private char getDirection(UIMaster shape)
+    private Direction getDirection(UIMaster shape)
     {
-        if (shape == top) { return 'U'; }
-        if (shape == right) { return 'R'; }
-        if (shape == bottom) { return 'D'; }
-        if (shape == left) { return 'L'; }
-        return '\0';
+        if (shape == top) { return Direction.Up; }
+        if (shape == right) { return Direction.Right; }
+        if (shape == bottom) { return Direction.Down; }
+        if (shape == left) { return Direction.Left; }
+        return Direction.Middle;
     }
 
-    private char unifyCode(char c)
+    private UIMaster getMasterFromDir(Direction dir)
     {
-        switch(c)
-        {
-            case 'U':
-            case 'u':
-            case 'T':
-            case 't':
-            case 'N':
-            case 'n':
-                return 'U';
-            case 'R':
-            case 'r':
-            case 'E':
-            case 'e':
-                return 'R';
-            case 'D':
-            case 'd':
-            case 'B':
-            case 'b':
-            case 'S':
-            case 's':
-                return 'D';
-            case 'L':
-            case 'l':
-            case 'W':
-            case 'w':
-                return 'L';
-        }
-        return '\0';
+        if(dir == Direction.Up) { return top; }
+        if(dir == Direction.Right) { return right; }
+        if(dir == Direction.Down) { return bottom; }
+        if(dir == Direction.Left) { return left; }
+        return null;
     }
 
     private Shape getShapeFromCode(char code)
@@ -888,66 +771,66 @@ public class AttackUI : MonoBehaviour {
         return (Shape)(-1);
     }
 
-    public void setColors(Dictionary<char, Color> colors)
+    public void setColors(Dictionary<Direction, Color> colors)
     {
-        if (colors.ContainsKey('U')) { top.fillColor = colors['U']; }
-        if (colors.ContainsKey('R')) { right.fillColor = colors['R']; }
-        if (colors.ContainsKey('D')) { bottom.fillColor = colors['D']; }
-        if (colors.ContainsKey('L')) { left.fillColor = colors['L']; }
+        if (colors.ContainsKey(Direction.Up)) { top.fillColor = colors[Direction.Up]; }
+        if (colors.ContainsKey(Direction.Right)) { right.fillColor = colors[Direction.Right]; }
+        if (colors.ContainsKey(Direction.Down)) { bottom.fillColor = colors[Direction.Down]; }
+        if (colors.ContainsKey(Direction.Left)) { left.fillColor = colors[Direction.Left]; }
     }
 
-    public void setShapes(Dictionary<char, char> shapes)
+    public void setShapes(Dictionary<Direction, Shape> shapes)
     {
-        if (shapes.ContainsKey('U')) { top.shape = getShapeFromCode(shapes['U']); }
-        if (shapes.ContainsKey('R')) { right.shape = getShapeFromCode(shapes['R']); }
-        if (shapes.ContainsKey('D')) { bottom.shape = getShapeFromCode(shapes['D']); }
-        if (shapes.ContainsKey('L')) { left.shape = getShapeFromCode(shapes['L']); }
+        if (shapes.ContainsKey(Direction.Up)) { top.shape = shapes[Direction.Up]; }
+        if (shapes.ContainsKey(Direction.Right)) { right.shape = shapes[Direction.Right]; }
+        if (shapes.ContainsKey(Direction.Down)) { bottom.shape = shapes[Direction.Down]; }
+        if (shapes.ContainsKey(Direction.Left)) { left.shape = shapes[Direction.Left]; }
     }
 
-    public void queueReset(float msTime, Dictionary<char, Color> colors, Dictionary<char, char> shapes)
+    public void queueReset(float msTime, Dictionary<Direction, Color> colors, Dictionary<Direction, Shape> shapes)
     {
         Change temp;
-        UIMaster shape = getShape('U');
+        UIMaster shape = getShape(Direction.Up);
         Change current = changeQueue.Find(change => change.shape == shape);
         while(current.next != null) { current = current.next; }
-        temp = getSetShapeColorChange('U', colors['U']);
-        temp.next = getMoveShapeToOriginalPositionChange('U', 0);
-        temp.next.next = getSetShapeShapeChange('U', shapes['U']);
-        temp.next.next.next = getShowShapeChange('U', 0);
-        temp.next.next.next.next = getGrowShapeChange('U', msTime);
+        temp = getSetShapeColorChange(Direction.Up, colors[Direction.Up]);
+        temp.next = getMoveShapeToOriginalPositionChange(Direction.Up, 0);
+        temp.next.next = getSetShapeShapeChange(Direction.Up, shapes[Direction.Up]);
+        temp.next.next.next = getShowShapeChange(Direction.Up, 0);
+        temp.next.next.next.next = getGrowShapeChange(Direction.Up, msTime);
         if (current != null) { current.next = temp; }
         else { changeQueue.Add(temp); }
 
-        shape = getShape('R');
+        shape = getShape(Direction.Right);
         current = changeQueue.Find(change => change.shape == shape);
         while (current.next != null) { current = current.next; }
-        temp = getSetShapeColorChange('R', colors['R']);
-        temp.next = getMoveShapeToOriginalPositionChange('R', 0);
-        temp.next.next = getSetShapeShapeChange('R', shapes['R']);
-        temp.next.next.next = getShowShapeChange('R', 0);
-        temp.next.next.next.next = getGrowShapeChange('R', msTime);
+        temp = getSetShapeColorChange(Direction.Right, colors[Direction.Right]);
+        temp.next = getMoveShapeToOriginalPositionChange(Direction.Right, 0);
+        temp.next.next = getSetShapeShapeChange(Direction.Right, shapes[Direction.Right]);
+        temp.next.next.next = getShowShapeChange(Direction.Right, 0);
+        temp.next.next.next.next = getGrowShapeChange(Direction.Right, msTime);
         if (current != null) { current.next = temp; }
         else { changeQueue.Add(temp); }
 
-        shape = getShape('D');
+        shape = getShape(Direction.Down);
         current = changeQueue.Find(change => change.shape == shape);
         while (current.next != null) { current = current.next; }
-        temp = getSetShapeColorChange('D', colors['D']);
-        temp.next = getMoveShapeToOriginalPositionChange('D', 0);
-        temp.next.next = getSetShapeShapeChange('D', shapes['D']);
-        temp.next.next.next = getShowShapeChange('D', 0);
-        temp.next.next.next.next = getGrowShapeChange('D', msTime);
+        temp = getSetShapeColorChange(Direction.Down, colors[Direction.Down]);
+        temp.next = getMoveShapeToOriginalPositionChange(Direction.Down, 0);
+        temp.next.next = getSetShapeShapeChange(Direction.Down, shapes[Direction.Down]);
+        temp.next.next.next = getShowShapeChange(Direction.Down, 0);
+        temp.next.next.next.next = getGrowShapeChange(Direction.Down, msTime);
         if (current != null) { current.next = temp; }
         else { changeQueue.Add(temp); }
 
-        shape = getShape('L');
+        shape = getShape(Direction.Left);
         current = changeQueue.Find(change => change.shape == shape);
         while (current.next != null) { current = current.next; }
-        temp = getSetShapeColorChange('L', colors['L']);
-        temp.next = getMoveShapeToOriginalPositionChange('L', 0);
-        temp.next.next = getSetShapeShapeChange('L', shapes['L']);
-        temp.next.next.next = getShowShapeChange('L', 0);
-        temp.next.next.next.next = getGrowShapeChange('L', msTime);
+        temp = getSetShapeColorChange(Direction.Left, colors[Direction.Left]);
+        temp.next = getMoveShapeToOriginalPositionChange(Direction.Left, 0);
+        temp.next.next = getSetShapeShapeChange(Direction.Left, shapes[Direction.Left]);
+        temp.next.next.next = getShowShapeChange(Direction.Left, 0);
+        temp.next.next.next.next = getGrowShapeChange(Direction.Left, msTime);
         if (current != null) { current.next = temp; }
         else { changeQueue.Add(temp); }
         

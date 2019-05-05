@@ -45,27 +45,27 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
     private void initialize()
     {
         ChoiceGroup children = new ChoiceGroup();
-        Node n = new Node(Classification.getIntermediary(), Direction.up, attackUI);
+        Node n = new Node(Classification.getIntermediary(), Direction.Up, attackUI);
         n.action = new AttackAction(this, interaction);
         children.up = n;
-        n = new Node(Classification.getFinal(), Direction.right, attackUI);
+        n = new Node(Classification.getFinal(), Direction.Right, attackUI);
         n.action = new AttackAction(this, interaction);
         children.right = n;
-        n = new Node(Classification.getFinal(), Direction.down, attackUI);
+        n = new Node(Classification.getFinal(), Direction.Down, attackUI);
         n.action = new AttackAction(this, interaction);
         children.down = n;
-        n = new Node(Classification.getFinal(), Direction.left, attackUI);
+        n = new Node(Classification.getFinal(), Direction.Left, attackUI);
         n.action = new AttackAction(this, interaction);
         children.left = n;
 
-        root = new Node(Classification.getNormal(), Direction.middle, attackUI);
+        root = new Node(Classification.getNormal(), Direction.Middle, attackUI);
         root.children = children;
 
         children = new ChoiceGroup();
-        n = new Node(Classification.getFinal(), Direction.up, attackUI);
+        n = new Node(Classification.getFinal(), Direction.Up, attackUI);
         n.action = new AttackAction(this, interaction);
         children.up = n;
-        n = new Node(Classification.getFinal(), Direction.down, attackUI);
+        n = new Node(Classification.getFinal(), Direction.Down, attackUI);
         n.action = new AttackAction(this, interaction);
         children.down = n;
         root.children.up.children = children;
@@ -175,17 +175,12 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
         }
 
         ready = false;
-
-        char dirCode = '\0';
-        if (n.dir == Direction.up) { dirCode = 'U'; }
-        else if(n.dir == Direction.right) { dirCode = 'R'; }
-        else if(n.dir == Direction.down) { dirCode = 'D'; }
-        else if(n.dir == Direction.left) { dirCode = 'L'; }
+        
         if(n == root) { attackUI.queueReset(200, n.children.getColors(), n.children.getShapes()); }
-        else { attackUI.selectCircle(dirCode, 200, n.children.getColors(), n.children.getShapes(), ++depth); }
+        else { attackUI.selectCircle(n.dir, 200, n.children.getColors(), n.children.getShapes(), ++depth); }
         
         current = n;
-        if (n.classification.mode == Classification.Mode.final)
+        if (n.classification.mode == Classification.Mode.Final)
         {
             depth = 0;
             transition(root);
@@ -230,17 +225,17 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
     {
         public Color color;
         public Mode mode;
-        public char shapeCode;
+        public Shape shape;
         
-        public enum Mode { normal, inter, final };
+        public enum Mode { Normal, Inter, Final };
 
         public static Classification getNormal()
         {
             return new Classification()
             {
                 color = new Color(0.596f, 0.596f, 0.596f),
-                mode = Mode.normal,
-                shapeCode = 'c',
+                mode = Mode.Normal,
+                shape = Shape.Circle,
             };
         }
 
@@ -249,8 +244,8 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
             return new Classification()
             {
                 color = new Color(0.965f, 0.631f, 0.259f),
-                mode = Mode.inter,
-                shapeCode = 'd',
+                mode = Mode.Inter,
+                shape = Shape.Diamond,
             };
         }
 
@@ -259,9 +254,22 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
             return new Classification()
             {
                 color = new Color(0.961f, 0.286f, 0.259f),
-                mode = Mode.final,
-                shapeCode = 's',
+                mode = Mode.Final,
+                shape = Shape.Rect,
             };
+        }
+
+        public static Classification GetClassificationByMode(Mode m)
+        {
+            if (m == Mode.Normal) { return getNormal(); }
+            if (m == Mode.Inter) { return getIntermediary(); }
+            if (m == Mode.Final) { return getFinal(); }
+            return getNormal();
+        }
+
+        public override string ToString()
+        {
+            return mode.ToString();
         }
     }
 
@@ -327,28 +335,37 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
         public Node down { get; set; }
         public Node left { get; set; }
 
-        public Dictionary<char, Color> getColors()
+        public Dictionary<Direction, Color> getColors()
         {
-            Dictionary<char, Color> ret = new Dictionary<char, Color>();
+            Dictionary<Direction, Color> ret = new Dictionary<Direction, Color>();
 
-            if(up != null) { ret['U'] = up.color; }
-            if (right != null) { ret['R'] = right.color; }
-            if (down != null) { ret['D'] = down.color; }
-            if (left != null) { ret['L'] = left.color; }
+            if(up != null) { ret[Direction.Up] = up.color; }
+            if (right != null) { ret[Direction.Right] = right.color; }
+            if (down != null) { ret[Direction.Down] = down.color; }
+            if (left != null) { ret[Direction.Left] = left.color; }
 
             return ret;
         }
 
-        public Dictionary<char, char> getShapes()
+        public Dictionary<Direction, Shape> getShapes()
         {
-            Dictionary<char, char> ret = new Dictionary<char, char>();
+            Dictionary<Direction, Shape> ret = new Dictionary<Direction, Shape>();
 
-            if (up != null) { ret['U'] = up.classification.shapeCode; }
-            if (right != null) { ret['R'] = right.classification.shapeCode; }
-            if (down != null) { ret['D'] = down.classification.shapeCode; }
-            if (left != null) { ret['L'] = left.classification.shapeCode; }
+            if (up != null) { ret[Direction.Up] = up.classification.shape; }
+            if (right != null) { ret[Direction.Right] = right.classification.shape; }
+            if (down != null) { ret[Direction.Down] = down.classification.shape; }
+            if (left != null) { ret[Direction.Left] = left.classification.shape; }
 
             return ret;
+        }
+
+        public Node getChildAtDir(Direction dir)
+        {
+            if(dir == Direction.Up) { return up; }
+            if(dir == Direction.Right) { return right; }
+            if(dir == Direction.Down) { return down; }
+            if(dir == Direction.Left) { return left; }
+            return null;
         }
     }
 }

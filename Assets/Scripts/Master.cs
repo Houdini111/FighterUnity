@@ -58,4 +58,4 @@ public class Master : MonoBehaviour
 }
 
 public enum Shape { Circle, Diamond, Rect }
-public enum Direction { up, right, down, left, middle };
+public enum Direction { Up, Right, Down, Left, Middle };

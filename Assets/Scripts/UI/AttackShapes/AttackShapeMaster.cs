@@ -253,11 +253,11 @@ public class AttackShapeMaster : UIMaster
         }
 
         rt = GetComponent<RectTransform>();
-        if (rt.position.x > 0) { direction = Direction.right; }
-        else if (rt.position.x < 0) { direction = Direction.left; }
-        else if (rt.position.y > 0) { direction = Direction.up; }
-        else if (rt.position.y < 0) { direction = Direction.down; }
-        else { direction = Direction.middle; }
+        if (rt.position.x > 0) { direction = Direction.Right; }
+        else if (rt.position.x < 0) { direction = Direction.Left; }
+        else if (rt.position.y > 0) { direction = Direction.Up; }
+        else if (rt.position.y < 0) { direction = Direction.Down; }
+        else { direction = Direction.Middle; }
 
         panelMaxSize = rt.sizeDelta;
 
