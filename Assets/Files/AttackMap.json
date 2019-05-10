@@ -1,18 +1,26 @@
-{"2": {"Classification": "Normal",
-"Children": {
-}},
-"4": {"Classification": "Final",
-"Children": {
-}},
-"3": {"Classification": "Inter",
-"Children": {
-"Up": 4}},
-"5": {"Classification": "Normal",
-"Children": {
-}},
-"6": {"Classification": "Final",
-"Children": {
-}},
-"1": {"Classification": "Normal",
-"Children": {
-"Up": 2, "Right": 3, "Down": 5, "Left": 6}}}
+{
+"1": {
+"Classification": "Normal",
+"Children": {}
+},
+"3": {
+"Classification": "Final",
+"Children": {}
+},
+"2": {
+"Classification": "Inter",
+"Children": {"Up": 3}
+},
+"4": {
+"Classification": "Normal",
+"Children": {}
+},
+"5": {
+"Classification": "Final",
+"Children": {}
+},
+"0": {
+"Classification": "Normal",
+"Children": {"Up": 1, "Right": 2, "Down": 4, "Left": 5}
+}
+}

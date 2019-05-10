@@ -309,7 +309,7 @@ namespace AttackMapEditor
             attackMapFile = new StreamWriter(fileName);
 
             CreateTreeNodeString(root, 0);
-            string outStr = "{";
+            string outStr = "{"+nl;
 
             bool first = true;
             foreach(KeyValuePair<int, string> node in NodeJsonStrings)
@@ -318,7 +318,7 @@ namespace AttackMapEditor
                 outStr += $"\"{node.Key}\": {node.Value}";
                 first = false;
             }
-            outStr += "}";
+            outStr += nl+"}";
 
             attackMapFile.Write(outStr);
 
@@ -361,27 +361,27 @@ namespace AttackMapEditor
 
         private (int thisNodeId, int nextAvailableId) CreateTreeNodeString(Node item, int myId)
         {
-            int id = ++myId;
-            string node = "{";
+            int nextId = myId + 1;
+            string node = "{" + nl;
             
             node += $"\"Classification\": \"{item.classification}\",{nl}";
-            node += "\"Children\": {" + nl;
+            node += "\"Children\": {";
             bool first = true;
             int childId;
             foreach(KeyValuePair<Direction, Node> pair in item.childNodes)
             {
                 if(pair.Value == null) { continue; }
                 if(!first) { node += ", "; }
-                (childId, id) = CreateTreeNodeString(pair.Value, id); //It will increment the ID itself and add itself to the list
+                (childId, nextId) = CreateTreeNodeString(pair.Value, nextId); //It will increment the ID itself and add itself to the list
                 if(childId != -1) { node += $"\"{pair.Key}\": {childId}"; }
                 first = false;
             }
             node += "}";
 
-            node += "}";
+            node += nl+"}";
 
             NodeJsonStrings.Add(myId, node);
-            return (myId, id);
+            return (myId, nextId);
         }
     }
 

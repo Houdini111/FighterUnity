@@ -382,12 +382,60 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
         StreamReader attackMapFile = new StreamReader(loc);
         string attackMapString = attackMapFile.ReadToEnd();
         attackMapFile.Close();
-        Dictionary<int, JsonNode> jsonNodes = JsonConvert.DeserializeObject<Dictionary<int, JsonNode>>(attackMapString);
+        Dictionary<int, PrimitiveJsonNode> primJsonNodes = JsonConvert.DeserializeObject<Dictionary<int, PrimitiveJsonNode>>(attackMapString);
+        List<JsonNode> finishedJsonNodes = new List<JsonNode>();
+        Dictionary<int, JsonNode> IDdJsonNodes = new Dictionary<int, JsonNode>();
+        foreach(KeyValuePair<int, PrimitiveJsonNode> primNode in primJsonNodes)
+        {
+            PrimitiveJsonNode pNode = primNode.Value;
+            JsonNode node = new JsonNode();
+            Classification.Mode mode = (Classification.Mode)Enum.Parse(typeof(Classification.Mode), pNode.classification);
+            node.classification = Classification.GetClassificationByMode(mode);
+            IDdJsonNodes.Add(primNode.Key, node);
+        }
+
+        //Once they're all converted, do it again to add the children, starting at root (ID: 0)
+        PrimitiveJsonNode pRoot = primJsonNodes[0];
+        JsonNode translatedRoot = IDdJsonNodes[0];
+        AddChildren(translatedRoot, pRoot, IDdJsonNodes, primJsonNodes);
+        finishedJsonNodes.Add(translatedRoot);
+
+        Console.Write("HERE");
+    }
+
+    public void AddChildren(JsonNode parent, PrimitiveJsonNode primitiveParent, Dictionary<int, JsonNode> translatedNodes, Dictionary<int, PrimitiveJsonNode> primitiveNodes)
+    {
+        foreach (KeyValuePair<string, int> childInfo in primitiveParent.children)
+        {
+            //For each child ID, find the non-primitive version,
+            //And then add it to its parent
+            PrimitiveJsonNode primitiveChild = primitiveNodes[childInfo.Value];
+            JsonNode translatedChild = translatedNodes[childInfo.Value];
+            Direction childDir = (Direction)Enum.Parse(typeof(Direction), childInfo.Key);
+            parent.children[childDir] = translatedChild;
+
+            AddChildren(translatedChild, primitiveChild, translatedNodes, primitiveNodes);
+        }
+    }
+
+    public class PrimitiveJsonNode
+    {
+        public string classification;
+        public Dictionary<string, int> children;
     }
 
     public class JsonNode
     {
-        public string classification;
-        public Dictionary<string, int> children;
+        public JsonNode()
+        {
+            children = new Dictionary<Direction, JsonNode>();
+            children[Direction.Up] = null;
+            children[Direction.Right] = null;
+            children[Direction.Down] = null;
+            children[Direction.Left] = null;
+        }
+
+        public Classification classification;
+        public Dictionary<Direction, JsonNode> children;
     }
 }
