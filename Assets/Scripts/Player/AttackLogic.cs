@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
 {
@@ -32,7 +35,7 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
             playerObj = GameObject.Find("Player");
         }
         player = playerObj.GetComponent<Player>();
-        
+        readAttackMapJson();
         initialize();
     }
 
@@ -367,5 +370,24 @@ public class AttackLogic : MonoBehaviour, AttackUI.IAttackUICallback
             if(dir == Direction.Left) { return left; }
             return null;
         }
+    }
+
+
+    public static string fileName = "AttackMap.json";
+    public void readAttackMapJson()
+    {
+        string loc = Application.dataPath + "/Files/" + fileName;
+        if (!File.Exists(loc)) { return; }
+
+        StreamReader attackMapFile = new StreamReader(loc);
+        string attackMapString = attackMapFile.ReadToEnd();
+        attackMapFile.Close();
+        Dictionary<int, JsonNode> jsonNodes = JsonConvert.DeserializeObject<Dictionary<int, JsonNode>>(attackMapString);
+    }
+
+    public class JsonNode
+    {
+        public string classification;
+        public Dictionary<string, int> children;
     }
 }

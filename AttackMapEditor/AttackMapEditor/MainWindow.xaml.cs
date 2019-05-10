@@ -292,11 +292,37 @@ namespace AttackMapEditor
             selected.select = true;
         }
 
+        private Dictionary<int, string> _nodeJsonStrings = null;
+        public Dictionary<int, string> NodeJsonStrings
+        {
+            get
+            {
+                if(_nodeJsonStrings == null) { _nodeJsonStrings = new Dictionary<int, string>(); }
+                return _nodeJsonStrings;
+            }
+        }
+        private string nl = Environment.NewLine; //nl == new line
+
         private void Save(object sender, RoutedEventArgs e)
         {
             System.IO.File.WriteAllText(fileName, string.Empty);
             attackMapFile = new StreamWriter(fileName);
 
+            CreateTreeNodeString(root, 0);
+            string outStr = "{";
+
+            bool first = true;
+            foreach(KeyValuePair<int, string> node in NodeJsonStrings)
+            {
+                if(!first) { outStr += $",{nl}"; }
+                outStr += $"\"{node.Key}\": {node.Value}";
+                first = false;
+            }
+            outStr += "}";
+
+            attackMapFile.Write(outStr);
+
+            /*
             bool first = true;
             foreach(NodeTreeItem item in nodeListView.Items)
             {
@@ -306,12 +332,14 @@ namespace AttackMapEditor
 
                 if (first) { first = false; }
             }
+            */
             
             attackMapFile.Close();
         }
-
+        /*
         private void WriteTreeItem(Node item, StreamWriter file)
         {
+            
             file.Write("{");
             file.WriteLine("\"Classification\": \"" + item.classification + "\",");
             file.WriteLine("\"Children\": {");
@@ -328,6 +356,32 @@ namespace AttackMapEditor
                 if (first) { first = false; }
             }
             file.WriteLine("}}");
+        }
+        */
+
+        private (int thisNodeId, int nextAvailableId) CreateTreeNodeString(Node item, int myId)
+        {
+            int id = ++myId;
+            string node = "{";
+            
+            node += $"\"Classification\": \"{item.classification}\",{nl}";
+            node += "\"Children\": {" + nl;
+            bool first = true;
+            int childId;
+            foreach(KeyValuePair<Direction, Node> pair in item.childNodes)
+            {
+                if(pair.Value == null) { continue; }
+                if(!first) { node += ", "; }
+                (childId, id) = CreateTreeNodeString(pair.Value, id); //It will increment the ID itself and add itself to the list
+                if(childId != -1) { node += $"\"{pair.Key}\": {childId}"; }
+                first = false;
+            }
+            node += "}";
+
+            node += "}";
+
+            NodeJsonStrings.Add(myId, node);
+            return (myId, id);
         }
     }
 
