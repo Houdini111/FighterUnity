@@ -7,13 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1280">
     <Grid>
-        <GroupBox x:Name="PropertiesGroupBox" Header="Properties" HorizontalAlignment="Left" Height="717" Margin="10,10,0,0" VerticalAlignment="Top" Width="275">
-            <Grid x:Name="PropertiesGrid" HorizontalAlignment="Left" Height="707" Margin="0,0,-2,-12" VerticalAlignment="Top" Width="265">
-                <Label Content="Classification" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top"/>
-                <ComboBox Name="ClassificationBox" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="245" SelectionChanged="ClassificationBoxChanged"/>
+        <GroupBox x:Name="PropertiesGroupBox" Header="Properties" HorizontalAlignment="Left" Height="704" Margin="10,23,0,0" VerticalAlignment="Top" Width="275">
+            <Grid x:Name="PropertiesGrid" HorizontalAlignment="Left" Height="707" Margin="0,0,-2,-57" VerticalAlignment="Top" Width="265">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="34*"/>
+                    <ColumnDefinition Width="231*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Classification" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <ComboBox Name="ClassificationBox" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="245" SelectionChanged="ClassificationBoxChanged" Grid.ColumnSpan="2"/>
             </Grid>
         </GroupBox>
-        <TreeView x:Name="NodeTreeView" HorizontalAlignment="Left" Height="717" Margin="987,10,0,0" VerticalAlignment="Top" Width="275"/>
+        <TreeView x:Name="NodeTreeView" HorizontalAlignment="Left" Height="704" Margin="987,23,0,0" VerticalAlignment="Top" Width="275"/>
 
         <Canvas Name="CenterButton" HorizontalAlignment="Left" Height="140" Margin="586,275,0,0" VerticalAlignment="Top" Width="140">
 
@@ -174,7 +178,15 @@
 
         </Canvas>
         <Button Name="UpButton" HorizontalAlignment="Left" Margin="494,182,0,0" VerticalAlignment="Top" Width="44" FontFamily="Marlett" FontSize="40" Content="5"/>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="900,687,0,0" VerticalAlignment="Top" Width="75" Height="40" Click="Save"/>
+        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1262">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Save" Click="Save_Click"/>
+                <MenuItem Header="_Load" Click="Load_Click"/>
+                <Separator/>
+                <MenuItem Header="_About"/>
+                <MenuItem Header="_Exit"/>
+            </MenuItem>
+        </Menu>
 
     </Grid>
 </Window>

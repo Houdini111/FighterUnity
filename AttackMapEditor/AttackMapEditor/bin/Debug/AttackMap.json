@@ -1,26 +1,103 @@
 {
-"1": {
-"Classification": "Normal",
-"Children": {}
-},
-"3": {
-"Classification": "Final",
-"Children": {}
-},
-"2": {
-"Classification": "Inter",
-"Children": {"Up": 3}
-},
-"4": {
-"Classification": "Normal",
-"Children": {}
-},
-"5": {
-"Classification": "Final",
-"Children": {}
-},
-"0": {
-"Classification": "Normal",
-"Children": {"Up": 1, "Right": 2, "Down": 4, "Left": 5}
-}
+  "childNodes": {
+    "Up": {
+      "childNodes": {
+        "Up": null,
+        "Right": null,
+        "Down": null,
+        "Left": null,
+        "Middle": null
+      },
+      "classification": {
+        "color": "#FFF54942",
+        "mode": 2,
+        "shape": 2
+      },
+      "direction": 0,
+      "preAction": null,
+      "action": null,
+      "postAction": null
+    },
+    "Right": {
+      "childNodes": {
+        "Up": {
+          "childNodes": {
+            "Up": null,
+            "Right": null,
+            "Down": null,
+            "Left": null,
+            "Middle": null
+          },
+          "classification": {
+            "color": "#FFF54942",
+            "mode": 2,
+            "shape": 2
+          },
+          "direction": 0,
+          "preAction": null,
+          "action": null,
+          "postAction": null
+        },
+        "Right": null,
+        "Down": null,
+        "Left": null,
+        "Middle": null
+      },
+      "classification": {
+        "color": "#FFF6A142",
+        "mode": 1,
+        "shape": 1
+      },
+      "direction": 1,
+      "preAction": null,
+      "action": null,
+      "postAction": null
+    },
+    "Down": {
+      "childNodes": {
+        "Up": null,
+        "Right": null,
+        "Down": null,
+        "Left": null,
+        "Middle": null
+      },
+      "classification": {
+        "color": "#FF989898",
+        "mode": 0,
+        "shape": 0
+      },
+      "direction": 2,
+      "preAction": null,
+      "action": null,
+      "postAction": null
+    },
+    "Left": {
+      "childNodes": {
+        "Up": null,
+        "Right": null,
+        "Down": null,
+        "Left": null,
+        "Middle": null
+      },
+      "classification": {
+        "color": "#FFF54942",
+        "mode": 2,
+        "shape": 2
+      },
+      "direction": 3,
+      "preAction": null,
+      "action": null,
+      "postAction": null
+    },
+    "Middle": null
+  },
+  "classification": {
+    "color": "#FF989898",
+    "mode": 0,
+    "shape": 0
+  },
+  "direction": 4,
+  "preAction": null,
+  "action": null,
+  "postAction": null
 }
